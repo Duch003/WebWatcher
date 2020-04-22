@@ -11,7 +11,7 @@ using WebWatcher.UI.Models;
 namespace WebWatcher.UI.ViewModels
 {
     public class UCMessageBoxViewModel : Screen, IHandle<Message<IUCMessageBoxViewModel, Exception>>,
-        IHandle<Message<IUCMessageBoxViewModel, ConsoleLog>>, IHandle<Message<IUCMessageBoxViewModel, Command>>, 
+        IHandle<Message<IUCMessageBoxViewModel, Response>>, IHandle<Message<IUCMessageBoxViewModel, Command>>, 
         IUCMessageBoxViewModel
     {
         private string _state;
@@ -46,7 +46,7 @@ namespace WebWatcher.UI.ViewModels
             State = Models.State.Ok.ToString();
         }
 
-        public void Handle(Message<IUCMessageBoxViewModel, ConsoleLog> message)
+        public void Handle(Message<IUCMessageBoxViewModel, Response> message)
         {
             if(message is null)
             {

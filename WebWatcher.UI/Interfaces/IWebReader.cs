@@ -1,9 +1,10 @@
 ﻿using System.Net;
+using WebWatcher.UI.Models;
 
 namespace WebWatcher.UI.Interfaces
 {
     public interface IWebReader
     {
-        HttpWebResponse Get(string url);
+        Response Get(string url);
     }
 }

@@ -14,6 +14,8 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -75,9 +77,6 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="WebDriver, Version=3.141.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Selenium.WebDriver.3.141.0\lib\net45\WebDriver.dll</HintPath>
-    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -110,13 +109,13 @@
     <Compile Include="Interfaces\IUrlValidator.cs" />
     <Compile Include="Interfaces\IWebService.cs" />
     <Compile Include="Models\Command.cs" />
-    <Compile Include="Models\ConsoleLog.cs" />
+    <Compile Include="Models\Response.cs" />
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\Result.cs" />
     <Compile Include="Models\State.cs" />
     <Compile Include="Readers\WebReader.cs" />
-    <Compile Include="Interfaces\IConsoleLogService.cs" />
-    <Compile Include="Services\ConsoleLogService.cs" />
+    <Compile Include="Interfaces\IMessageService.cs" />
+    <Compile Include="Services\MessageService.cs" />
     <Compile Include="Validators\UrlValidator.cs" />
     <Compile Include="Services\WebService.cs" />
     <Compile Include="Startup.cs" />

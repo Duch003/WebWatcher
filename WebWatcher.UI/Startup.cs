@@ -71,7 +71,7 @@ namespace WebWatcher.UI
 
             //Services
             builder.RegisterType<WebService>().As<IWebService>();
-            builder.RegisterType<ConsoleLogService>().As<IConsoleLogService>();
+            builder.RegisterType<MessageService>().As<IMessageService>();
 
             //ViewModels
             builder.RegisterType<UCLogPanelViewModel>().As<IUCLogPanelViewModel>();

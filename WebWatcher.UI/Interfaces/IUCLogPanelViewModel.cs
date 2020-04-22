@@ -7,6 +7,6 @@ namespace WebWatcher.UI.Interfaces
     {
         string Notes { get; set; }
         void Handle(Message<IUCMessageBoxViewModel, Command> message);
-        void Handle(Message<IUCLogPanelViewModel, ConsoleLog> message);
+        void Handle(Message<IUCLogPanelViewModel, Response> message);
     }
 }

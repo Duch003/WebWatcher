@@ -20,38 +20,22 @@ namespace WebWatcher.UI.Services
             _validator = validator;
         }
 
-        public Result<HttpWebResponse> CheckPage(string url)
+        public Result<Response> CheckPage(string url)
         {
-            if (string.IsNullOrWhiteSpace(url))
-            {
-                return new Result<HttpWebResponse>(null, new ArgumentNullException(nameof(url)));
-            }
-
-            bool isValid;
-            try
-            {
-                isValid = _validator.IsUrlValid(url);
-            }
-            catch (Exception e)
-            {
-                return new Result<HttpWebResponse>(null, e);
-            }
-
-            if (!isValid)
+            if (!_validator.IsUrlValid(url))
             {
                 var message = $"Url <<{url}>> is invalid.";
-                var e = new ArgumentException(message, nameof(url));
-                return new Result<HttpWebResponse>(null, e);
+                return new Result<Response>(null, new ArgumentException(message, nameof(url)));
             }
 
             try
             {
                 var response = _webReader.Get(url);
-                return new Result<HttpWebResponse>(response);
+                return new Result<Response>(response);
             }
             catch (Exception e)
             {
-                return new Result<HttpWebResponse>(null, e);
+                return new Result<Response>(null, e);
             }
         }
     }

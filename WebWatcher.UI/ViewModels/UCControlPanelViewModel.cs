@@ -52,10 +52,10 @@ namespace WebWatcher.UI.ViewModels
         protected IEventAggregator _eventAggregator;
         protected IWebService _webService;
         protected IUrlValidator _urlValidator;
-        private readonly IConsoleLogService _logService;
+        private readonly IMessageService _logService;
 
         public UCControlPanelViewModel(IEventAggregator eventAggregator, IWebService webService, IUrlValidator urlValidator,
-            IConsoleLogService logService)
+            IMessageService logService)
         {
             Time = 1;
             InitializeTimer();
@@ -110,15 +110,7 @@ namespace WebWatcher.UI.ViewModels
                 return;
             }
 
-            var log = _logService.HttpWebResponseToConsoleLog(result.Output);
-            if (!log.IsFine)
-            {
-                _eventAggregator.PublishOnUIThread(new Message<IUCMessageBoxViewModel, Exception>(log.Exception));
-                Reset();
-                return;
-            }
-
-            _eventAggregator.PublishOnUIThread(new Message<IUCLogPanelViewModel, ConsoleLog>(log.Output));
+            _eventAggregator.PublishOnUIThread(new Message<IUCLogPanelViewModel, Response>(result.Output));
         }
 
         protected void InitializeTimer()

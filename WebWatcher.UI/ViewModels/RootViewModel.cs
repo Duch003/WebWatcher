@@ -1,8 +1,4 @@
 ﻿using Caliburn.Micro;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Edge;
-using OpenQA.Selenium.IE;
-using OpenQA.Selenium.Remote;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -79,13 +75,13 @@ namespace WebWatcher.UI.ViewModels
 
         public void Click()
         {
-            var temp = new ConsoleLog();
+            var temp = new Response();
             temp.DateTime = DateTime.Now;
             temp.State = State.Ok;
             temp.Status = HttpStatusCode.OK;
             temp.Url = "test";
-            var message1 = new Message<IUCLogPanelViewModel, ConsoleLog>(temp);
-            var message2 = new Message<IUCMessageBoxViewModel, ConsoleLog>(temp);
+            var message1 = new Message<IUCLogPanelViewModel, Response>(temp);
+            var message2 = new Message<IUCMessageBoxViewModel, Response>(temp);
             _eventAggregator.PublishOnUIThread(message1);
             _eventAggregator.PublishOnUIThread(message2);
         }

@@ -14,7 +14,7 @@ using WebWatcher.UI.Models;
 namespace WebWatcher.UI.ViewModels
 {
 
-    public class UCLogPanelViewModel : Screen, IHandle<Message<IUCLogPanelViewModel, ConsoleLog>>, 
+    public class UCLogPanelViewModel : Screen, IHandle<Message<IUCLogPanelViewModel, Response>>, 
         IHandle<Message<IUCMessageBoxViewModel, Command>>, IUCLogPanelViewModel
     {
         private string _notes;
@@ -29,23 +29,23 @@ namespace WebWatcher.UI.ViewModels
         }
 
         private readonly IEventAggregator _eventAggregator;
-        private readonly IConsoleLogService _logService;
+        private readonly IMessageService _logService;
 
-        public UCLogPanelViewModel(IEventAggregator eventAggregator, IConsoleLogService logService)
+        public UCLogPanelViewModel(IEventAggregator eventAggregator, IMessageService logService)
         {
             _eventAggregator = eventAggregator;
             _logService = logService;
             _eventAggregator.Subscribe(this);
         }
 
-        public void Handle(Message<IUCLogPanelViewModel, ConsoleLog> message)
+        public void Handle(Message<IUCLogPanelViewModel, Response> message)
         {
             if (message.Value is null)
             {
                 return;
             }
 
-            var result = _logService.LogToText(message.Value);
+            var result = _logService.ResponseToText(message.Value);
 
             if (!result.IsFine)
             {
