@@ -13,5 +13,10 @@ namespace WebWatcher.UI.Models
         public HttpStatusCode Status { get; set; }
         public DateTime DateTime { get; set; }
         public string Url { get; set; }
+
+        public Response Clone()
+        {
+            return (Response)this.MemberwiseClone();
+        }
     }
 }

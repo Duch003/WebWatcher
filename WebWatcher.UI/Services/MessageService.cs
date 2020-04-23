@@ -14,8 +14,9 @@ namespace WebWatcher.UI.Services
         protected readonly string _schema;
         protected readonly string _command;
         protected readonly string _error;
+        protected IDateTimeSerivce _dateTimeService;
         protected Dictionary<string, int> _colors;
-        public MessageService()
+        public MessageService(IDateTimeSerivce dateTimeService)
         {
             _colors = new Dictionary<string, int>();
             _colors.Add("green", 2);
@@ -42,6 +43,7 @@ namespace WebWatcher.UI.Services
                     @"\cf1 [Internal error] " +
                     @"\cf1 \b [{{MESSAGE}}] \b0" +
                     @"\par}";
+            _dateTimeService = dateTimeService;
         }
 
         public Result<string> ResponseToText(Response log)
@@ -79,7 +81,7 @@ namespace WebWatcher.UI.Services
         {
             var output = (string)_command.Clone();
             output = output
-                .Replace("{{TIME}}", DateTime.Now.ToLongTimeString())
+                .Replace("{{TIME}}", _dateTimeService.GetNow().ToLongTimeString())
                 .Replace("{{COMMAND}}", $"Timer {command.ToString()}");
 
             switch (command)
@@ -103,9 +105,14 @@ namespace WebWatcher.UI.Services
 
         public string GetError(string message = "An internal error occured.")
         {
+            if (string.IsNullOrWhiteSpace(message))
+            {
+                message = "An internal error occured.";
+            }
+
             var output = (string)_error.Clone();
             output = output
-                .Replace("{{TIME}}", DateTime.Now.ToLongTimeString())
+                .Replace("{{TIME}}", _dateTimeService.GetNow().ToLongTimeString())
                 .Replace("{{MESSAGE}}", message);
 
             return output;

@@ -115,6 +115,8 @@
     <Compile Include="Models\State.cs" />
     <Compile Include="Readers\WebReader.cs" />
     <Compile Include="Interfaces\IMessageService.cs" />
+    <Compile Include="Services\DateTimeSerivce.cs" />
+    <Compile Include="Interfaces\IDateTimeSerivce.cs" />
     <Compile Include="Services\MessageService.cs" />
     <Compile Include="Validators\UrlValidator.cs" />
     <Compile Include="Services\WebService.cs" />
