@@ -20,7 +20,7 @@
         <Slider Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" x:Name="Time" 
                 Minimum="1" Style="{StaticResource RequestIntervalSliderStyle}"></Slider>
         <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Style="{StaticResource MessageBoxBorderStyle}" Tag="{Binding State}">
-            <TextBox x:Name="Url" TextWrapping="Wrap" Style="{StaticResource MessageBoxTextBoxStyle}" Tag="{Binding State}"/>
+            <TextBox x:Name="Url" TextWrapping="Wrap" Style="{StaticResource MessageBoxTextBoxStyle}" Tag="{Binding State}" IsEnabled="{Binding CanChangeAddress}"/>
         </Border>
         <Button x:Name="Start" Grid.Row="2" Grid.Column="0">Start</Button>
         <Button x:Name="Stop" Grid.Row="2" Grid.Column="1">Stop</Button>

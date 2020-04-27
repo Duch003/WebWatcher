@@ -72,18 +72,5 @@ namespace WebWatcher.UI.ViewModels
             UCLogPanelViewModel = Startup.Resolve<IUCLogPanelViewModel>();
             UCControlPanelViewModel = Startup.Resolve<IUCControlPanelViewModel>();
         }
-
-        public void Click()
-        {
-            var temp = new Response();
-            temp.DateTime = DateTime.Now;
-            temp.State = State.Ok;
-            temp.Status = HttpStatusCode.OK;
-            temp.Url = "test";
-            var message1 = new Message<IUCLogPanelViewModel, Response>(temp);
-            var message2 = new Message<IUCMessageBoxViewModel, Response>(temp);
-            _eventAggregator.PublishOnUIThread(message1);
-            _eventAggregator.PublishOnUIThread(message2);
-        }
     }
 }

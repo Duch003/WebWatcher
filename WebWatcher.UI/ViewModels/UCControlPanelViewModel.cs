@@ -12,6 +12,17 @@ namespace WebWatcher.UI.ViewModels
 {
     public class UCControlPanelViewModel : Screen, IUCControlPanelViewModel
     {
+        private bool _canChangeAddress;
+        public bool CanChangeAddress
+        {
+            get { return _canChangeAddress; }
+            private set 
+            { 
+                _canChangeAddress = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
         private string _state;
         public string State
         {
@@ -42,7 +53,7 @@ namespace WebWatcher.UI.ViewModels
             set
             {
                 _url = value;
-                ValidateUrls();
+                _canStart = ValidateUrls();
                 NotifyOfPropertyChange();
                 NotifyOfPropertyChange(() => CanStart);
             }
@@ -52,31 +63,30 @@ namespace WebWatcher.UI.ViewModels
         protected IEventAggregator _eventAggregator;
         protected IWebService _webService;
         protected IUrlValidator _urlValidator;
-        private readonly IMessageService _logService;
+        private bool _canStart = false;
 
-        public UCControlPanelViewModel(IEventAggregator eventAggregator, IWebService webService, IUrlValidator urlValidator,
-            IMessageService logService)
+        public UCControlPanelViewModel(IEventAggregator eventAggregator, IWebService webService, IUrlValidator urlValidator)
         {
             Time = 1;
             InitializeTimer();
             _eventAggregator = eventAggregator;
             _webService = webService;
             _urlValidator = urlValidator;
-            _logService = logService;
             _eventAggregator.Subscribe(this);
+            CanChangeAddress = true;
         }
 
-        public bool CanStart => !_timer.Enabled && ValidateUrls();
+        public bool CanStart => !_timer.Enabled && _canStart;
         public void Start()
         {
             if (_timer.Interval != MultipliedTime)
             {
                 Reset();
             }
+            CanChangeAddress = false;
             _timer.Interval = MultipliedTime;
             _timer.Start();
-            _eventAggregator.PublishOnUIThread(new Message<IUCMessageBoxViewModel, Command>(Command.Start));
-            _eventAggregator.PublishOnUIThread(new Message<IUCLogPanelViewModel, Command>(Command.Start));
+            Publish(Command.Start);
             NotifyAll();
         }
 
@@ -84,8 +94,8 @@ namespace WebWatcher.UI.ViewModels
         public void Stop()
         {
             _timer.Stop();
-            _eventAggregator.PublishOnUIThread(new Message<IUCMessageBoxViewModel, Command>(Command.Stop));
-            _eventAggregator.PublishOnUIThread(new Message<IUCLogPanelViewModel, Command>(Command.Stop));
+            CanChangeAddress = true;
+            Publish(Command.Stop);
             NotifyAll();
         }
 
@@ -94,9 +104,9 @@ namespace WebWatcher.UI.ViewModels
         {
             _timer.Stop();
             _timer.Dispose();
+            CanChangeAddress = true;
             InitializeTimer();
-            _eventAggregator.PublishOnUIThread(new Message<IUCMessageBoxViewModel, Command>(Command.Reset));
-            _eventAggregator.PublishOnUIThread(new Message<IUCLogPanelViewModel, Command>(Command.Reset));
+            Publish(Command.Reset);
             NotifyAll();
         }
 
@@ -124,16 +134,25 @@ namespace WebWatcher.UI.ViewModels
         protected bool ValidateUrls()
         {
             var result = _urlValidator.IsUrlValid(Url);
-            if (!result)
+            var newState = result ? Models.State.Ok.ToString() : Models.State.Error.ToString();
+
+            if(newState == State)
+            {
+                return result;
+            }
+            else if (!result)
             {
                 State = Models.State.Error.ToString();
                 _eventAggregator.PublishOnUIThread(new Message<IUCMessageBoxViewModel, Command>(Command.InvalidUrl));
-                return false;
+            }
+            else
+            {
+                State = Models.State.Ok.ToString();
+                _eventAggregator.PublishOnUIThread(new Message<IUCMessageBoxViewModel, Command>(Command.ValidUrl));
             }
 
-            State = Models.State.Ok.ToString();
-            _eventAggregator.PublishOnUIThread(new Message<IUCMessageBoxViewModel, Command>(Command.ValidUrl));
-            return true;
+            
+            return result;
         }
 
         protected void NotifyAll()
@@ -141,6 +160,11 @@ namespace WebWatcher.UI.ViewModels
             NotifyOfPropertyChange(() => CanStart);
             NotifyOfPropertyChange(() => CanStop);
             NotifyOfPropertyChange(() => CanReset);
+        }
+        protected void Publish(Command command)
+        {
+            _eventAggregator.PublishOnUIThread(new Message<IUCMessageBoxViewModel, Command>(command));
+            _eventAggregator.PublishOnUIThread(new Message<IUCLogPanelViewModel, Command>(command));
         }
     }
 }

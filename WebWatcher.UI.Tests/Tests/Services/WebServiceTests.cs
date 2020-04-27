@@ -70,5 +70,48 @@ namespace WebWatcher.UI.Tests.Tests.Services
             Assert.NotNull(result.Exception);
             Assert.IsTrue(result.Exception is ArgumentException);
         }
+
+        [Test]
+        public void CheckPage_ValidUrlPassed_ExceptionOnResponseThrown_ReturnsResultWithException()
+        {
+            //Arrange
+            //Act
+            var result = _service.CheckPage(_exceptionUrl);
+
+            //Assert
+            Assert.IsFalse(result.IsFine);
+            Assert.Null(result.Output);
+            Assert.NotNull(result.Exception);
+            Assert.IsTrue(result.Exception is Exception);
+            Assert.IsTrue(result.Exception.Message == "Test");
+        }
+
+        [Test]
+        public void CheckPage_EmptyUrlPassed_ReturnsResultWithException()
+        {
+            //Arrange
+            //Act
+            var result = _service.CheckPage(string.Empty);
+
+            //Assert
+            Assert.IsFalse(result.IsFine);
+            Assert.Null(result.Output);
+            Assert.NotNull(result.Exception);
+            Assert.IsTrue(result.Exception is ArgumentException);
+        }
+
+        [Test]
+        public void CheckPage_NullUrlPassed_ReturnsResultWithException()
+        {
+            //Arrange
+            //Act
+            var result = _service.CheckPage(null);
+
+            //Assert
+            Assert.IsFalse(result.IsFine);
+            Assert.Null(result.Output);
+            Assert.NotNull(result.Exception);
+            Assert.IsTrue(result.Exception is ArgumentException);
+        }
     }
 }
